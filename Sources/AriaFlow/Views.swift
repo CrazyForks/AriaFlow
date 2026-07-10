@@ -1451,7 +1451,7 @@ struct SettingsWindowView: View {
                 }
 
                 settingsRow("GitHub", detail: nil) {
-                    Link("github.com/AnInsomniacy/aria2-next", destination: aria2NextRepositoryURL)
+                    Link("FateLightX/AriaFlow", destination: ariaFlowRepositoryURL)
                         .lineLimit(1)
                 }
 
@@ -1467,8 +1467,8 @@ struct SettingsWindowView: View {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.1.0"
     }
 
-    private var aria2NextRepositoryURL: URL {
-        URL(string: "https://github.com/AnInsomniacy/aria2-next")!
+    private var ariaFlowRepositoryURL: URL {
+        URL(string: "https://github.com/FateLightX/AriaFlow")!
     }
 
     private var aria2WebsiteURL: URL {
