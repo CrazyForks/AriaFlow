@@ -17,15 +17,13 @@ struct AriaFlowApp: App {
                 .environmentObject(store)
                 .frame(minWidth: 720, minHeight: 420)
                 .onAppear {
-                    AppPresentation.mainWindowDidAppear()
+                    AppPresentation.mainWindowDidAppear(store: store)
                 }
                 .onDisappear {
                     AppPresentation.mainWindowDidDisappear(store: store)
                 }
         }
         .defaultSize(width: 720, height: 420)
-        .defaultLaunchBehavior(.suppressed)
-        .restorationBehavior(.disabled)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("新建任务...") {

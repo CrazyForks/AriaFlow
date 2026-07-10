@@ -2,7 +2,7 @@
 
 ## Development
 
-- Require macOS 26 and Xcode 26 or a compatible Swift 6.2 toolchain.
+- The deployment target is macOS 14. Release builds require Xcode 26 or a compatible Swift 6.2 toolchain.
 - Run `swift build --disable-sandbox` before opening a pull request.
 - Run `scripts/verify_release.sh` for changes that affect packaging, resources, or download behavior.
 - Keep UI copy consistent with the existing Simplified Chinese interface and document user-facing behavior in English.

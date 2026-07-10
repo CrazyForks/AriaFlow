@@ -16,8 +16,8 @@ env HOME="$PWD/.build/home" \
 Expected result:
 
 - `dist/AriaFlow.app` exists.
-- `dist/AriaFlow-0.1.0.zip` exists.
-- `dist/AriaFlow-0.1.0.zip.sha256` verifies.
+- `dist/AriaFlow-0.1.1.zip` exists.
+- `dist/AriaFlow-0.1.1.zip.sha256` verifies.
 - Main executable reports `x86_64 arm64`.
 - Both bundled sidecars exist and are executable.
 - The app bundle contains `THIRD_PARTY_NOTICES.md` and `ThirdParty/aria2-next/COPYING`.
@@ -64,7 +64,7 @@ Confirm Settings -> Engine reports a bundled sidecar and downloads work.
 
 ## Distribution Check
 
-For the `v0.1.0` public developer build:
+For the `v0.1.1` public developer build:
 
 - Confirm the GitHub Release ZIP and `.sha256` file are uploaded together.
 - Confirm the release notes say the archive is ad-hoc signed and not notarized.

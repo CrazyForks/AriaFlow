@@ -726,22 +726,32 @@ struct AddTaskSheet: View {
     }
 
     var body: some View {
-        GlassEffectContainer(spacing: 14) {
-            VStack(alignment: .leading, spacing: 16) {
-                header
-
-                taskForm
-
-                Spacer(minLength: 0)
-
-                footer
+        Group {
+            if #available(macOS 26.0, *) {
+                GlassEffectContainer(spacing: 14) {
+                    sheetContent
+                }
+            } else {
+                sheetContent
             }
-            .padding(24)
         }
         .onAppear {
             downloadDirectory = store.settings.downloadDirectory
             splitCount = store.settings.splitCount
         }
+    }
+
+    private var sheetContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            header
+
+            taskForm
+
+            Spacer(minLength: 0)
+
+            footer
+        }
+        .padding(24)
     }
 
     private var header: some View {
@@ -791,7 +801,7 @@ struct AddTaskSheet: View {
                         } label: {
                             Label("粘贴", systemImage: "doc.on.clipboard")
                         }
-                        .buttonStyle(.glass)
+                        .ariaFlowGlassButtonStyle()
                         .controlSize(.small)
                     }
 
@@ -837,7 +847,7 @@ struct AddTaskSheet: View {
                     Button("选择...") {
                         chooseTorrentFile()
                     }
-                    .buttonStyle(.glass)
+                    .ariaFlowGlassButtonStyle()
                 }
                 .frame(height: 92)
             }
@@ -882,11 +892,24 @@ struct AddTaskSheet: View {
         }
     }
 
+    @ViewBuilder
     private func glassPanel<Content: View>(@ViewBuilder content: () -> Content) -> some View {
-        content()
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        if #available(macOS 26.0, *) {
+            content()
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .glassEffect(.regular.interactive(), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        } else {
+            content()
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color(nsColor: .separatorColor).opacity(0.55), lineWidth: 1)
+                }
+        }
     }
 
     private var footer: some View {
@@ -900,7 +923,7 @@ struct AddTaskSheet: View {
             Button("取消") {
                 store.showAddTask = false
             }
-            .buttonStyle(.glass)
+            .ariaFlowGlassButtonStyle()
             .keyboardShortcut(.cancelAction)
 
             if tab == "url" {
@@ -909,14 +932,14 @@ struct AddTaskSheet: View {
                         await store.addURLTask(urlText: parsedURLs.joined(separator: "\n"), fileName: fileName, splitCount: splitCount, downloadDirectory: downloadDirectory)
                     }
                 }
-                .buttonStyle(.glassProminent)
+                .ariaFlowGlassButtonStyle(prominent: true)
                 .keyboardShortcut(.defaultAction)
                 .disabled(!hasURLInput || hasInvalidURLInput)
             } else {
                 Button("选择 Torrent...") {
                     chooseTorrentFile()
                 }
-                .buttonStyle(.glassProminent)
+                .ariaFlowGlassButtonStyle(prominent: true)
                 .keyboardShortcut(.defaultAction)
             }
         }
@@ -938,7 +961,7 @@ struct AddTaskSheet: View {
                 Button("选择...") {
                     chooseDownloadDirectory()
                 }
-                .buttonStyle(.glass)
+                .ariaFlowGlassButtonStyle()
                 .controlSize(.small)
             }
         }
@@ -1042,6 +1065,23 @@ struct AddTaskSheet: View {
             }
         }
         return true
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func ariaFlowGlassButtonStyle(prominent: Bool = false) -> some View {
+        if #available(macOS 26.0, *) {
+            if prominent {
+                buttonStyle(.glassProminent)
+            } else {
+                buttonStyle(.glass)
+            }
+        } else if prominent {
+            buttonStyle(.borderedProminent)
+        } else {
+            buttonStyle(.bordered)
+        }
     }
 }
 
@@ -1464,7 +1504,7 @@ struct SettingsWindowView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.1.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.1.1"
     }
 
     private var ariaFlowRepositoryURL: URL {

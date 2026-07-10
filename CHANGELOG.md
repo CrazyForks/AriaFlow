@@ -2,6 +2,22 @@
 
 All notable changes to AriaFlow are documented in this file.
 
+## 0.1.1 - 2026-07-11
+
+### Changed
+
+- Lowered the deployment target to macOS 14.
+- Kept Liquid Glass controls on macOS 26 and added standard material/button fallbacks for macOS 14 and 15.
+
+### Fixed
+
+- Preserved menu-bar launch behavior without relying on macOS 15-only scene APIs.
+- Disabled main-window state restoration through the cross-version AppKit window path.
+
+### Known Limitations
+
+- Archives use ad-hoc signing and are not notarized; Gatekeeper may require explicit user confirmation.
+
 ## 0.1.0 - 2026-07-11
 
 ### Added

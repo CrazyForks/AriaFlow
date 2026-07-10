@@ -23,12 +23,12 @@ AriaFlow 是 macOS 原生 SwiftUI 下载客户端，使用本地随包的 `aria2
 
 ### 系统要求
 
-- macOS 26 或更高版本。
+- macOS 14 或更高版本；macOS 26 会启用 Liquid Glass 效果。
 - 源码构建需要 Xcode 26 或兼容的 Swift 6.2 工具链。
 
 ### 下载与安装
 
-从 [Releases](https://github.com/FateLightX/AriaFlow/releases) 下载 ZIP 和对应 `.sha256` 校验文件。`v0.1.0` 使用 ad-hoc 签名，未经过 Apple 公证。首次打开时，Gatekeeper 可能拦截应用：在 Finder 中按住 Control 点击 `AriaFlow.app`，选择“打开”，然后再次确认。
+从 [Releases](https://github.com/FateLightX/AriaFlow/releases) 下载 ZIP 和对应 `.sha256` 校验文件。`v0.1.1` 使用 ad-hoc 签名，未经过 Apple 公证。首次打开时，Gatekeeper 可能拦截应用：在 Finder 中按住 Control 点击 `AriaFlow.app`，选择“打开”，然后再次确认。
 
 ### 构建与验证
 
@@ -57,12 +57,12 @@ AriaFlow is a native SwiftUI download client for macOS. It runs a bundled local 
 
 ### Requirements
 
-- macOS 26 or later.
+- macOS 14 or later; Liquid Glass styling is enabled on macOS 26.
 - Xcode 26 or a compatible Swift 6.2 toolchain to build from source.
 
 ### Download and install
 
-Download the ZIP and matching `.sha256` file from [Releases](https://github.com/FateLightX/AriaFlow/releases). `v0.1.0` is ad-hoc signed and is not notarized. Gatekeeper may block the first launch; Control-click `AriaFlow.app` in Finder, choose **Open**, then confirm.
+Download the ZIP and matching `.sha256` file from [Releases](https://github.com/FateLightX/AriaFlow/releases). `v0.1.1` is ad-hoc signed and is not notarized. Gatekeeper may block the first launch; Control-click `AriaFlow.app` in Finder, choose **Open**, then confirm.
 
 ### Build and verify
 

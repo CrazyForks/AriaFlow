@@ -3,10 +3,17 @@ import SwiftUI
 
 @MainActor
 enum AppPresentation {
+    private static var mainWindowPresentationRequested = false
+    private static var ignoreMainWindowDisappearUntil: Date?
+
     static func showMainWindow(using openWindow: OpenWindowAction) {
+        mainWindowPresentationRequested = true
         prepareForWindowPresentation()
         openWindow(id: "main")
         activateOnNextRunLoop()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            mainWindowPresentationRequested = false
+        }
     }
 
     static func showSettings(using openSettings: OpenSettingsAction) {
@@ -15,12 +22,32 @@ enum AppPresentation {
         activateOnNextRunLoop()
     }
 
-    static func mainWindowDidAppear() {
+    static func mainWindowDidAppear(store: AppStore) {
+        let mainWindow = NSApp.windows.first { $0.title == "AriaFlow" }
+            ?? NSApp.windows.first(where: \.canBecomeMain)
+        mainWindow?.isRestorable = false
+
+        if !store.settings.showMainWindowOnLaunch && !mainWindowPresentationRequested {
+            ignoreMainWindowDisappearUntil = Date().addingTimeInterval(1)
+            DispatchQueue.main.async {
+                mainWindow?.orderOut(nil)
+                updateActivationPolicy(store: store)
+            }
+            return
+        }
+
+        mainWindowPresentationRequested = false
         prepareForWindowPresentation()
     }
 
     static func mainWindowDidDisappear(store: AppStore) {
         DispatchQueue.main.async {
+            if let deadline = ignoreMainWindowDisappearUntil, Date() < deadline {
+                ignoreMainWindowDisappearUntil = nil
+                updateActivationPolicy(store: store)
+                return
+            }
+
             if store.settings.keepRunningAfterMainWindowClose {
                 updateActivationPolicy(store: store)
             } else {

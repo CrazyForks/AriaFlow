@@ -28,7 +28,7 @@
 ### 项目基础
 
 - 使用 SwiftPM 初始化 macOS SwiftUI 应用。
-- macOS 目标版本：macOS 26。
+- macOS 最低目标版本：macOS 14；macOS 26 使用 Liquid Glass，旧系统使用标准材质回退。
 - 项目已可通过 `swift build` 编译。
 - 未引入第三方 Swift 依赖。
 - SwiftPM 已配置 `Sources/AriaFlow/Resources` 资源目录，用于放置 sidecar 和默认配置。

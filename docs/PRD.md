@@ -44,7 +44,7 @@ AriaFlow 保留 Motrix/Motrix Next 的核心能力：
 
 ### 3.1 必须完成
 
-- macOS 26+ 原生客户端。
+- macOS 14+ 原生客户端；macOS 26 启用 Liquid Glass，旧系统使用标准系统样式。
 - Intel 和 Apple Silicon 支持。
 - 内置 `aria2-next` sidecar。
 - 自动启动和停止下载引擎。

@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_NAME="AriaFlow"
 BUNDLE_ID="${BUNDLE_ID:-com.ariaflow.desktop}"
-APP_VERSION="${APP_VERSION:-0.1.0}"
+APP_VERSION="${APP_VERSION:-0.1.1}"
 BUILD_NUMBER="${BUILD_NUMBER:-1}"
 UNIVERSAL="${UNIVERSAL:-1}"
 SIGN_IDENTITY="${SIGN_IDENTITY:--}"
@@ -61,11 +61,11 @@ if [[ "$UNIVERSAL" == "1" ]]; then
         exit 1
     }
 
-    swift_build -c release --triple x86_64-apple-macosx26.0
-    swift_build -c release --triple arm64-apple-macosx26.0
+    swift_build -c release --triple x86_64-apple-macosx14.0
+    swift_build -c release --triple arm64-apple-macosx14.0
 
-    X86_BIN_DIR="$(swift_build -c release --triple x86_64-apple-macosx26.0 --show-bin-path)"
-    ARM_BIN_DIR="$(swift_build -c release --triple arm64-apple-macosx26.0 --show-bin-path)"
+    X86_BIN_DIR="$(swift_build -c release --triple x86_64-apple-macosx14.0 --show-bin-path)"
+    ARM_BIN_DIR="$(swift_build -c release --triple arm64-apple-macosx14.0 --show-bin-path)"
     lipo -create "$X86_BIN_DIR/$APP_NAME" "$ARM_BIN_DIR/$APP_NAME" -output "$APP_DIR/Contents/MacOS/$APP_NAME"
     RESOURCE_BUNDLE="$X86_BIN_DIR/${APP_NAME}_${APP_NAME}.bundle"
 else
@@ -132,7 +132,7 @@ cat > "$APP_DIR/Contents/Info.plist" <<PLIST
     <key>CFBundleVersion</key>
     <string>$BUILD_NUMBER</string>
     <key>LSMinimumSystemVersion</key>
-    <string>26.0</string>
+    <string>14.0</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     <key>CFBundleDocumentTypes</key>

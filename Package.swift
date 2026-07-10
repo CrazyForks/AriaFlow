@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "AriaFlow",
     platforms: [
-        .macOS(.v26)
+        .macOS(.v14)
     ],
     products: [
         .executable(name: "AriaFlow", targets: ["AriaFlow"])
