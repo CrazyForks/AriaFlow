@@ -44,15 +44,21 @@ cleanup() {
 trap cleanup EXIT
 
 printf "AriaFlow sidecar smoke test\n" > "$SERVER_DIR/payload.txt"
+URL="http://127.0.0.1:$HTTP_PORT/payload.txt"
 
 "$PYTHON_BIN" -m http.server "$HTTP_PORT" --bind 127.0.0.1 --directory "$SERVER_DIR" >/dev/null 2>&1 &
 HTTP_PID=$!
-sleep 0.2
-if ! kill -0 "$HTTP_PID" >/dev/null 2>&1; then
+for _ in {1..40}; do
+    if curl -fsS --max-time 1 "$URL" >/dev/null 2>&1; then
+        break
+    fi
+    sleep 0.1
+done
+curl -fsS --max-time 1 "$URL" >/dev/null || {
     echo "failed to start local HTTP server on 127.0.0.1:$HTTP_PORT" >&2
     echo "this environment may block local TCP listeners" >&2
     exit 1
-fi
+}
 
 "$ENGINE_PATH" \
     --enable-rpc=true \
@@ -93,7 +99,6 @@ done
 
 rpc "aria2.getVersion" >/dev/null
 
-URL="http://127.0.0.1:$HTTP_PORT/payload.txt"
 ADD_RESPONSE="$(rpc "aria2.addUri" "[\"$URL\"],{\"dir\":\"$DOWNLOAD_DIR\"}")"
 GID="$(printf "%s" "$ADD_RESPONSE" | "$PYTHON_BIN" -c 'import json,sys; print(json.load(sys.stdin)["result"])')"
 
