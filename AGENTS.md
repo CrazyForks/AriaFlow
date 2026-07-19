@@ -80,5 +80,6 @@ Do not commit `dist/`, `.build/`, local app data, RPC secrets, certificates or n
 - `docs/RELEASE_CHECKLIST.md`: release gate.
 - `THIRD_PARTY_NOTICES.md`: bundled binary provenance.
 - `CHANGELOG.md`: release history and pending user-visible changes.
+- `docs/OPTIMIZATION_EXECUTION.md`: optimization batch execution notes.
 
 Update only the smallest relevant document. Avoid narrative status logs and duplicated specifications.

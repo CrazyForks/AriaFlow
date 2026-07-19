@@ -2,6 +2,22 @@
 
 All notable changes to AriaFlow are documented in this file.
 
+## 0.3.2 - 2026-07-20
+
+### Changed
+
+- Poll slower when idle; tolerate brief RPC failures before disconnecting.
+- Paginate waiting/stopped task lists (up to 2000) and show a status-bar truncation hint.
+- Keep selection stable when a task disappears instead of jumping to the first row.
+- Infer HTTP/Magnet/ED2K/FTP/BT protocol labels; surface real error/source detail.
+- Notify only on complete/fail (no “任务开始” spam).
+- Default TLS certificate verification on; tighten RPC origin; keep RPC secret in a 0600 runtime conf (not process argv).
+- Align packaging resource layout handling and CI default version.
+
+### Fixed
+
+- Removed dead mock `updateSelectedStatus` helper.
+
 ## 0.3.1 - 2026-07-19
 
 ### Changed

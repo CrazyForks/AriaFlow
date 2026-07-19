@@ -4,11 +4,12 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_NAME="AriaFlow"
 BUNDLE_ID="${BUNDLE_ID:-com.ariaflow.desktop}"
-APP_VERSION="${APP_VERSION:-0.3.1}"
-BUILD_NUMBER="${BUILD_NUMBER:-3}"
+APP_VERSION="${APP_VERSION:-0.3.2}"
+BUILD_NUMBER="${BUILD_NUMBER:-4}"
 UNIVERSAL="${UNIVERSAL:-1}"
 SIGN_IDENTITY="${SIGN_IDENTITY:--}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-}"
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 SWIFT_BUILD_FLAGS=(--disable-sandbox)
 APP_DIR="$ROOT_DIR/dist/$APP_NAME.app"
 ZIP_PATH="$ROOT_DIR/dist/$APP_NAME-$APP_VERSION.zip"
@@ -79,7 +80,18 @@ fi
 chmod +x "$APP_DIR/Contents/MacOS/$APP_NAME"
 
 if [[ -d "$RESOURCE_BUNDLE" ]]; then
-    cp -R "$RESOURCE_BUNDLE/Resources/." "$APP_DIR/Contents/Resources/"
+    # SwiftPM nests package resources under Resources/ inside the module bundle.
+    if [[ -d "$RESOURCE_BUNDLE/Resources" ]]; then
+        cp -R "$RESOURCE_BUNDLE/Resources/." "$APP_DIR/Contents/Resources/"
+    else
+        cp -R "$RESOURCE_BUNDLE/." "$APP_DIR/Contents/Resources/"
+    fi
+fi
+
+# Flatten one extra Resources/ layer if present (depends on .copy("Resources") layout).
+if [[ -d "$APP_DIR/Contents/Resources/Resources" ]]; then
+    cp -R "$APP_DIR/Contents/Resources/Resources/." "$APP_DIR/Contents/Resources/"
+    rm -rf "$APP_DIR/Contents/Resources/Resources"
 fi
 
 mkdir -p "$APP_DIR/Contents/Resources/ThirdParty/aria2-next"

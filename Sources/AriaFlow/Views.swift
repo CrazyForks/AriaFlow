@@ -680,6 +680,10 @@ struct StatusBarView: View {
 
             Text("↓ \(store.downloadSpeedText)")
             Text("↑ \(store.uploadSpeedText)")
+            if store.taskListTruncated {
+                Text("列表过长已截断")
+                    .foregroundStyle(.orange)
+            }
 
             Divider()
                 .frame(height: 16)
@@ -1297,6 +1301,9 @@ struct SettingsWindowView: View {
                 toggleRow("关闭主窗口后继续运行", isOn: $store.settings.keepRunningAfterMainWindowClose)
                 toggleRow("隐藏 Dock 图标", isOn: hideDockIconBinding)
                     .disabled(!canRunInMenuBar)
+                Text("开启后不出现在 Dock，主窗口与设置仍可打开。")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
 
             settingsPanel(title: "维护", symbol: "arrow.counterclockwise") {
@@ -1587,7 +1594,7 @@ struct SettingsWindowView: View {
     }
 
     private var appVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.1"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.2"
     }
 
     private var ariaFlowRepositoryURL: URL {

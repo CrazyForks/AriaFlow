@@ -93,6 +93,9 @@ Torrent file bytes → Base64 → `aria2.addTorrent` with `pause=true` → file 
 
 Window activation and Dock visibility must remain centralized in `AppPresentation`. When `hideDockIconInMenuBarMode` is enabled, the app stays `.accessory` even if main or settings windows are visible.
 
+
+Polling uses a 2s interval while downloads are active and 5s when idle. Transient RPC errors are tolerated for a few cycles before disconnecting. Waiting/stopped lists are paginated (100 per page, max 20 pages).
+
 ## Scripts
 
 | Script | Purpose |
