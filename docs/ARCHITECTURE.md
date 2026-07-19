@@ -91,7 +91,7 @@ Torrent file bytes → Base64 → `aria2.addTorrent` with `pause=true` → file 
 - Settings scene: general, downloads, engine and about tabs.
 - Menu bar extra: window access, queue actions, speeds and quit.
 
-Window activation and Dock visibility must remain centralized in `AppPresentation`.
+Window activation and Dock visibility must remain centralized in `AppPresentation`. When `hideDockIconInMenuBarMode` is enabled, the app stays `.accessory` even if main or settings windows are visible.
 
 ## Scripts
 

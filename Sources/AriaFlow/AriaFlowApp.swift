@@ -118,7 +118,7 @@ struct AriaFlowApp: App {
             SettingsWindowView()
                 .environmentObject(store)
                 .onAppear {
-                    AppPresentation.settingsDidAppear()
+                    AppPresentation.settingsDidAppear(store: store)
                 }
                 .onDisappear {
                     AppPresentation.settingsDidDisappear(store: store)
