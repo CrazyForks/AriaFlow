@@ -91,4 +91,4 @@ Explicitly **deferred / out of scope for now**:
 - Product enhancements (task detail, multi-select, remote diagnostics, etc.)
 - Developer ID notarization
 
-Current optimization track is considered **complete** for reliability, security hardening, file split, settings debounce, and README asset compression. CHANGELOG Unreleased notes (debounce, README asset compression) were folded into formal 0.3.2 / 0.1.4. Optional next step: cut GitHub Releases for those versions.
+Current optimization track is considered **complete** for reliability, security hardening, file split, settings debounce, and README asset compression. CHANGELOG Unreleased notes (debounce, README asset compression) were folded into formal 0.3.2. Optional next step: cut GitHub Release v0.3.2.
