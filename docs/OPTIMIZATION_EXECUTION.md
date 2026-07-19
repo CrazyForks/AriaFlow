@@ -29,7 +29,7 @@ Source plan: dual-app review (reliability / security / engineering)
 - Shared Swift package / monorepo for AriaFlow + AriaLite core
 - Full `Models.swift` / `Views.swift` file split
 - Notarized Developer ID distribution
-- Settings disk-write debouncing on every `@Published` mutation
+- ~~Settings disk-write debouncing~~ → done (400ms debounce + terminate flush)
 - Compress README AppIcon assets
 
 ## Key code touchpoints
@@ -74,3 +74,10 @@ Completed a pure structural split (no behavior change):
 - `SettingsViews.swift` — settings tabs
 
 `AppStore` remains large by design until helpers are intentionally promoted from `private` for extension-based splits.
+
+
+## Follow-up: Settings persistence debounce (2026-07-20)
+
+- `AppSettings` (and AriaFlow `history`) saves are coalesced with a 400ms Task debounce.
+- Init hydration skips scheduling.
+- Pending writes flush in `stopEngineForAppTermination()`.

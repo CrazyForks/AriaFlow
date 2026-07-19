@@ -5,6 +5,7 @@ final class AppStore: ObservableObject {
     private static let maxHistoryItems = 500
     private static let maxRPCSecretLength = 128
     private static let rpcRestartDelay: Duration = .seconds(1)
+    private static let persistenceDebounce: Duration = .milliseconds(400)
 
     @Published var connectionState: ConnectionState = .stopped
     @Published var engineMessage = "下载引擎未连接"
@@ -25,7 +26,7 @@ final class AppStore: ObservableObject {
     @Published private(set) var peerBlocklistBusy = false
     @Published var settings: AppSettings {
         didSet {
-            LocalJSONStore.save(settings, to: LocalAppFiles.settingsURL)
+            scheduleSettingsSave()
         }
     }
     @Published var fileCandidates: [FileCandidate] = []
@@ -34,11 +35,14 @@ final class AppStore: ObservableObject {
 
     @Published var history: [HistoryItem] {
         didSet {
-            LocalJSONStore.save(history, to: LocalAppFiles.historyURL)
+            scheduleHistorySave()
         }
     }
 
     private var didAttemptAutomaticConnection = false
+    private var isHydratingPersistence = false
+    private var settingsSaveTask: Task<Void, Never>?
+    private var historySaveTask: Task<Void, Never>?
     private var pollingTask: Task<Void, Never>?
     private var pendingEngineRestartTask: Task<Void, Never>?
     private var consecutivePollFailures = 0
@@ -54,8 +58,10 @@ final class AppStore: ObservableObject {
         let loadedSettings = LocalJSONStore.load(AppSettings.self, from: LocalAppFiles.settingsURL)
         let loadedHistory = LocalJSONStore.load([HistoryItem].self, from: LocalAppFiles.historyURL)
 
+        isHydratingPersistence = true
         settings = loadedSettings ?? AppSettings()
         history = Array((loadedHistory ?? []).prefix(Self.maxHistoryItems))
+        isHydratingPersistence = false
         if !settings.btPeerBlocklistURL.isEmpty {
             peerBlocklistMessage = "已保存，将在引擎连接时加载"
         }
@@ -247,6 +253,7 @@ final class AppStore: ObservableObject {
     }
 
     func stopEngineForAppTermination() {
+        flushPendingPersistence()
         stopPolling()
         pendingEngineRestartTask?.cancel()
         pendingEngineRestartTask = nil
@@ -1119,6 +1126,35 @@ final class AppStore: ObservableObject {
 
     private func speedLimitOption(_ value: Int) -> String? {
         value > 0 ? "\(value)M" : nil
+    }
+
+    private func scheduleSettingsSave() {
+        guard !isHydratingPersistence else { return }
+        settingsSaveTask?.cancel()
+        settingsSaveTask = Task { [weak self] in
+            try? await Task.sleep(for: Self.persistenceDebounce)
+            guard !Task.isCancelled, let self else { return }
+            LocalJSONStore.save(self.settings, to: LocalAppFiles.settingsURL)
+        }
+    }
+
+    private func scheduleHistorySave() {
+        guard !isHydratingPersistence else { return }
+        historySaveTask?.cancel()
+        historySaveTask = Task { [weak self] in
+            try? await Task.sleep(for: Self.persistenceDebounce)
+            guard !Task.isCancelled, let self else { return }
+            LocalJSONStore.save(self.history, to: LocalAppFiles.historyURL)
+        }
+    }
+
+    private func flushPendingPersistence() {
+        settingsSaveTask?.cancel()
+        settingsSaveTask = nil
+        historySaveTask?.cancel()
+        historySaveTask = nil
+        LocalJSONStore.save(settings, to: LocalAppFiles.settingsURL)
+        LocalJSONStore.save(history, to: LocalAppFiles.historyURL)
     }
 
     private func startPolling() {
