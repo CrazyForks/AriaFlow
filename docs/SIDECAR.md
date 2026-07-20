@@ -41,7 +41,7 @@ Runtime arguments are assembled in `EngineManager.startIfNeeded()`:
 - validated `bt-peer-blocklist` path when configured
 - `--conf-path` pointing at Application Support `engine-runtime.conf` (mode `0600`), which holds `rpc-secret` and related overrides
 
-Do not put the RPC secret on process argv. Aria2 Next owns log rotation (defaults 10 MB × 4 files).
+Do not put the RPC secret on process argv. TLS verification uses the system CA file via `ca-certificate` when available. Aria2 Next owns log rotation (defaults 10 MB × 4 files).
 
 ## Peer Blocklist
 

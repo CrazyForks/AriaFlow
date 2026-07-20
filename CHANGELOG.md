@@ -2,6 +2,12 @@
 
 All notable changes to AriaFlow are documented in this file.
 
+## 0.3.3 - 2026-07-20
+
+### Fixed
+
+- HTTPS downloads failed with “unable to get local issuer certificate” after enabling TLS verification. The managed engine now loads the macOS CA bundle (`/etc/ssl/cert.pem`) via `ca-certificate`.
+
 ## 0.3.2 - 2026-07-20
 
 ### Changed

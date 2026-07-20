@@ -51,7 +51,7 @@ Code and tests are authoritative. Do not recreate removed PRD, prototype, progre
 - Settings and history disk writes are debounced (400ms) and must flush on app termination
 - RPC is localhost-only; never log or document live secrets
 - Managed engine writes `rpc-secret` into `engine-runtime.conf` mode `0600` via `--conf-path`; do not put secrets on process argv
-- Default TLS check-certificate on; `rpc-allow-origin-all=false`
+- Default TLS verification on with system CA bundle (`ca-certificate`, usually `/etc/ssl/cert.pem`); `rpc-allow-origin-all=false`
 - Window activation and Dock policy live only in `AppPresentation` (hide-Dock stays `.accessory` with windows open)
 - Do not pass Aria2 Next-only flags to system fallback engines
 - Peer blocklists are URL-sourced, cached locally; failed reloads keep prior rules
